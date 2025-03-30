@@ -1,33 +1,18 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Controls.Primitives;
 
 namespace DataVisualizationApp.Views
 {
     public partial class MainWindow : Window
     {
-       // private Border mainBorder;
+        private Popup? popup;
 
         public MainWindow()
         {
             InitializeComponent();
-            // SetBorderSize();
+            popup = this.FindControl<Popup>("Popup");
         }
-
-       /* private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-            mainBorder = this.FindControl<Border>("MainBorder");
-        }
-
-        private void SetBorderSize()
-        {
-            var primaryScreen = Screens.Primary;
-            var screenWidth = primaryScreen.Bounds.Width;
-            var screenHeight = primaryScreen.Bounds.Height;
-
-            mainBorder.Width = screenWidth;
-            mainBorder.Height = screenHeight;
-        } */
     }
 }

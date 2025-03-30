@@ -16,63 +16,85 @@
     </Design.DataContext>
 
     <Grid>
-        <Border Height="830" Width="1535"> <!-- Sizing not working properly -->
-            <ScrollViewer>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="60" /> <!-- Title -->
-                        <RowDefinition Height="100" /> <!-- Short Description -->
-                        <RowDefinition Height="30" /> <!-- ComboBox and Button -->
-                        <RowDefinition Height="250" /> <!-- First&Second Chart -->
-                        <RowDefinition Height="40" /> <!-- Delete Button -->
-                        <RowDefinition Height="250" /> <!-- Third&Fourth Chart -->
-                        <RowDefinition Height="40" /> <!-- Delete Button -->
-                        <RowDefinition Height="*" /> <!-- Remaining space -->
-                    </Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.2*" /> <!-- Title -->
+            <RowDefinition Height="1.5*" /> <!-- Short Description -->
+            <RowDefinition Height="1*" /> <!-- ComboBox and Button -->
+            <RowDefinition Height="0.8*" /> <!-- Pop-up messages -->
+            <RowDefinition Height="5.6*" /> <!-- First & Second Chart -->
+            <RowDefinition Height="5.6*" /> <!-- Third & Fourth Chart -->
+            <RowDefinition Height="*" /> <!-- Remaining space -->
+        </Grid.RowDefinitions>
 
-                    <Border Grid.Row="0" Background="LightBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="0,20,0,0">
-                        <TextBlock FontSize="18" FontWeight="Bold" 
-                                HorizontalAlignment="Center" VerticalAlignment="Center"
-                                Text="Student Performance Factors" />
-                    </Border>
-
-                    <!-- innen kell még a méreteket jól beállítanom -->
-                    <TextBlock Grid.Row="1" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="10"
-                     Text="On this page you can see charts based on analysed data. It is about how different factors influence the performance of students.&#10;The factors are as follows: hours studied, attendance, parental involvement, access to resources, extracurricular activities, sleep hours, previous scores, motivation level, internet access, tutoring sessions, family income, teacher quality, school type, peer influence, physical activity, learning disabilities, parental education level, distance from home and gender."/>
-                    
-                    <Grid Grid.Row="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*" /> <!-- ComboBox: Half of the page -->
-                            <ColumnDefinition Width="*" />  <!-- Button: One fourth of the page -->
-                            <ColumnDefinition Width="*" />  <!-- Remaining space -->
-                        </Grid.ColumnDefinitions>
-                        <ComboBox Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10" SelectedIndex="0" PlaceholderText="Choose from the queries..." />
-                        <Button Grid.Column="1" Content="Add chart" HorizontalAlignment="Stretch" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10" />
-                    </Grid>
-
-                    <!-- First & Second Chart -->
-                    <Border Grid.Row="3" Background="LightGreen" Margin="10">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="First and Second Chart Placeholder" />
-                    </Border>
-
-                    <!-- Delete Button -->
-                    <Border Grid.Row="4" Background="LightCoral" Margin="10">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Delete Button Placeholder" />
-                    </Border>
-
-                    <!-- Third & Fourth Chart -->
-                    <Border Grid.Row="5" Background="LightYellow" Margin="10">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Third and Fourth Chart Placeholder" />
-                    </Border>
-
-                    <!-- Delete Button -->
-                    <Border Grid.Row="6" Background="LightPink" Margin="10">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Delete Button Placeholder" />
-                    </Border>
-
-                </Grid>
-            </ScrollViewer>
+        <Border Grid.Row="0" Background="MediumPurple" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="0,20,0,20">
+            <TextBlock FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Text="Student Performance Factors" />
         </Border>
-    </Grid>    
+
+        <TextBlock Grid.Row="1" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="10"
+                Text="On this page you can see charts based on analysed data. It is about how different factors influence the performance of students.&#10;The factors are as follows: hours studied, attendance, parental involvement, access to resources, extracurricular activities, sleep hours, previous scores, motivation level, internet access, tutoring sessions, family income, teacher quality, school type, peer influence, physical activity, learning disabilities, parental education level, distance from home and gender." />
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" /> 
+                <ColumnDefinition Width="1*" /> 
+                <ColumnDefinition Width="1*" /> 
+            </Grid.ColumnDefinitions>
+
+            <ComboBox Grid.Column="0" SelectedItem="{Binding SelectedQuery}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10" PlaceholderText="Choose from the queries...">
+                <ComboBoxItem Content="Query 1" />
+                <ComboBoxItem Content="Query 2" />
+                <ComboBoxItem Content="Query 3" />
+                <ComboBoxItem Content="Query 4" />
+            </ComboBox>
+            <Button Grid.Column="1" Content="Add chart" Command="{Binding AddChart}" Background="MediumSeaGreen" HorizontalAlignment="Stretch" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10" />
+            <Button Grid.Column="2" Content="Delete chart" Command="{Binding DeleteChart}" Background="IndianRed" HorizontalAlignment="Stretch" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10"
+                    IsVisible="{Binding DeleteButtonVisible}" />
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <Popup Name="Popup" IsLightDismissEnabled="True" IsOpen="{Binding PopupOpen}">    
+                <Border BorderThickness="0.75" BorderBrush="Black" Padding="6,3" Background="White">
+                    <TextBlock Text="{Binding Message}" Foreground="{Binding Colour}"/>
+                </Border>
+            </Popup>
+        </Grid>
+
+        <Grid Grid.Row="4" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" /> 
+                <ColumnDefinition Width="3*" /> 
+                <ColumnDefinition Width="*" /> 
+                <ColumnDefinition Width="3*" /> 
+                <ColumnDefinition Width="*" /> 
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="1" Background="LightGreen" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="First Chart Placeholder" />
+            </Border>
+
+            <Border Grid.Column="3" Background="DarkGreen" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Second Chart Placeholder" />
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="5" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="3*" /> 
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="3*" /> 
+                <ColumnDefinition Width="*" /> 
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="1" Background="Yellow" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Third Chart Placeholder" />
+            </Border>
+
+            <Border Grid.Column="3" Background="LightYellow" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Fourth Chart Placeholder" />
+            </Border>
+        </Grid>
+    </Grid>
 
 </Window>
