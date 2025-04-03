@@ -1,11 +1,27 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:views="clr-namespace:DataVisualizationApp.Views"
+        xmlns:vm="using:DataVisualizationApp.ViewModels"
+        xmlns:views="using:DataVisualizationApp.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="DataVisualizationApp.Views.MainWindow"
-        Title="Data Visualization">
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="DataVisualizationApp">
 
-    <Grid>
-        <views:PieChartView />
-    </Grid>
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <TabControl>
+        <TabItem Header="Pie Chart 1">
+            <views:PieChartView />
+        </TabItem>
+
+        <TabItem Header="Pie Chart 2">
+            <views:Nr2PieChartView />
+        </TabItem>
+    </TabControl>
 
 </Window>
