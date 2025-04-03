@@ -5,6 +5,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
+
+// Create PieSeries by School Type (Public/Private)
+
+
 namespace DataVisualizationApp.ViewModels;
 
 public class PieChartViewModel : INotifyPropertyChanged

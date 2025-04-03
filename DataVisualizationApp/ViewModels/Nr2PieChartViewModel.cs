@@ -25,19 +25,17 @@ namespace DataVisualizationApp.ViewModels
         {
             List<StudentPerformance> students = CsvService.LoadCsv();
 
-            // Group by Peer Influence and calculate percentage
+            // Group by Peer Influence and count the number of students in each group
             var peerInfluenceCounts = students
                 .GroupBy(s => s.Peer_Influence) // Group by Peer Influence
                 .ToDictionary(g => g.Key, g => g.Count());
 
-            var totalStudents = students.Count();
-
-            // Create PieSeries for each PeerInfluence group with percentage
+            // Create PieSeries for each Peer Influence group with the count of students
             Series = peerInfluenceCounts.Select(kvp =>
                 new PieSeries<int>
                 {
-                    Values = new int[] { (int)((double)kvp.Value / totalStudents * 100) },
-                    Name = kvp.Key
+                    Values = new int[] { kvp.Value }, // Number of students in this Peer Influence group
+                    Name = $"{kvp.Key}" // Label showing the group and count
                 }).ToList();
         }
 
