@@ -5,15 +5,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
+namespace DataVisualizationApp.ViewModels;
 
-// Create PieSeries by School Type (Public/Private)
-
-
-namespace DataVisualizationApp.ViewModels
-{
 public class PieChartViewModel : INotifyPropertyChanged
 {
-    private IEnumerable<ISeries> _series = new List<ISeries>();
+    private IEnumerable<ISeries> _series;
     public IEnumerable<ISeries> Series
     {
         get => _series;
@@ -29,18 +25,12 @@ public class PieChartViewModel : INotifyPropertyChanged
     {
         List<StudentPerformance> students = CsvService.LoadCsv();
 
-            // Use the query from MainWindowViewModel for total attendance by school type
         var schoolCounts = students
-                .GroupBy(s => s.School_Type) 
-                .Select(g => new
-                {
-                    SchoolType = g.Key,
-                    TotalAttendance = g.Sum(s => s.Attendance) // You can sum attendance here or adapt to your needs
-                })
-                .ToList();
+            .GroupBy(s => s.School_Type) // Group by School Type (Public/Private)
+            .ToDictionary(g => g.Key, g => g.Count());
 
         Series = schoolCounts.Select(kvp =>
-                new PieSeries<int> { Values = new int[] { kvp.TotalAttendance }, Name = kvp.SchoolType }).ToList();
+            new PieSeries<int> { Values = new int[] { kvp.Value }, Name = kvp.Key }).ToList();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -48,5 +38,4 @@ public class PieChartViewModel : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-}
 }
