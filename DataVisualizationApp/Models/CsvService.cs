@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System;
 using CsvHelper;
+using DataVisualizationApp.Models;
 
 public class CsvService
 {

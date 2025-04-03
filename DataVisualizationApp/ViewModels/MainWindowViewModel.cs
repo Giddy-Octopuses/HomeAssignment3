@@ -11,6 +11,7 @@ using Avalonia.Controls;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using DataVisualizationApp.Models;
 
 public partial class MainWindowViewModel : ViewModelBase
 {

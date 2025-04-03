@@ -1,0 +1,73 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DataVisualizationApp.ViewModels"
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:charts="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
+        mc:Ignorable="d"
+        d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="DataVisualizationApp.Views.StudentPerformanceView"
+        x:DataType="vm:StudentPerformanceViewModel">
+    
+    <Design.DataContext>
+        <vm:StudentPerformanceViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <TabControl>
+            
+            <!-- Line Chart: Hours Studied vs. Exam Score -->
+            <TabItem Header="Study Hours &amp; Exam Score">
+                <lvc:CartesianChart>
+                    <lvc:CartesianChart.XAxes>
+                        <lvc:Axis Labels="{Binding HoursStudiedLabels}" />
+                    </lvc:CartesianChart.XAxes>
+                    <lvc:CartesianChart.YAxes>
+                        <lvc:Axis Labeler="{Binding ExamScoreLabeler}" />
+                    </lvc:CartesianChart.YAxes>
+                    <lvc:CartesianChart.Series>
+                        <lvc:LineSeries Values="{Binding ExamScoreByHoursStudied}" StrokeThickness="2"/>
+                    </lvc:CartesianChart.Series>
+                </lvc:CartesianChart>
+            </TabItem>
+            
+            <!-- Bar Chart: Family Income vs. Exam Score -->
+            <TabItem Header="Family Income &amp; Exam Score">
+                <lvc:CartesianChart>
+                    <lvc:CartesianChart.Series>
+                        <lvc:ColumnSeries Values="{Binding ExamScoreByIncome}"/>
+                    </lvc:CartesianChart.Series>
+                </lvc:CartesianChart>
+            </TabItem>
+            
+            <!-- Bar Chart: Exam Scores by Gender -->
+            <TabItem Header="Exam Scores by Gender">
+                <lvc:CartesianChart>
+                    <lvc:CartesianChart.Series>
+                        <lvc:ColumnSeries Values="{Binding ExamScoreByGender}"/>
+                    </lvc:CartesianChart.Series>
+                </lvc:CartesianChart>
+            </TabItem>
+            
+            <!-- Pie Chart: Peer Influence Distribution -->
+            <TabItem Header="Peer Influence Distribution">
+                <lvc:PieChart>
+                    <lvc:PieChart.Series>
+                        <lvc:PieSeries Values="{Binding PeerInfluenceDistribution}"/>
+                    </lvc:PieChart.Series>
+                </lvc:PieChart>
+            </TabItem>
+            
+            <!-- Stacked Bar Chart: School Type Impact -->
+            <TabItem Header="School Type Impact">
+                <lvc:CartesianChart>
+                    <lvc:CartesianChart.Series>
+                        <lvc:StackedColumnSeries Values="{Binding ExamScoreBySchoolType}"/>
+                    </lvc:CartesianChart.Series>
+                </lvc:CartesianChart>
+            </TabItem>
+            
+        </TabControl>
+    </Grid>
+</Window>
