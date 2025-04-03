@@ -9,7 +9,7 @@ namespace DataVisualizationApp.ViewModels;
 
 public class PieChartViewModel : INotifyPropertyChanged
 {
-    private IEnumerable<ISeries> _series;
+    private IEnumerable<ISeries> _series = new List<ISeries>();
     public IEnumerable<ISeries> Series
     {
         get => _series;
