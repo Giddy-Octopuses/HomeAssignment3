@@ -8,8 +8,12 @@
              x:DataType="vm:Nr5PieChartViewModel"
              xmlns:vms="using:ViewModelsSamples.Axes.LabelsFormat"
              xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia">
-    
-        <Grid>
-            <lvc:PieChart Series="{Binding Series}" />
-        </Grid>
+
+     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+
+        <TextBlock Text="Students based on their sleep hours" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Margin="15"/>
+
+        <lvc:PieChart Series="{Binding Series}" Width="500" Height="500" />
+
+     </StackPanel>
 </UserControl>

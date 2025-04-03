@@ -29,6 +29,9 @@
         <TabItem Header="Pie Chart 4">
             <views:Nr5PieChartView />
         </TabItem>
+        <TabItem Header="Pie Chart 5">
+            <views:Nr6PieChartView />
+        </TabItem>
         <TabItem Header="Bar Chart 1">
             <views:Nr4BarChartView />
         </TabItem>

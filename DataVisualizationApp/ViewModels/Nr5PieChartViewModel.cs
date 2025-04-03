@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System;
 
 
-//Students grades based on their sleep hours
+//Students based on their sleep hours
 
 
 namespace DataVisualizationApp.ViewModels

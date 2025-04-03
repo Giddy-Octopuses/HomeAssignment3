@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 
 
-//Percentage of Students by peer influence  {pie chart}
+//Number of Students by peer influence  {pie chart}
 
 
 namespace DataVisualizationApp.ViewModels
