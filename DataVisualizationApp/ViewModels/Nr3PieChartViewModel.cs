@@ -5,11 +5,15 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
+
+//Students with Exam Score [could be a pie chart with exam scores 0-10; 11-20; 21-30 and so on]
+
+
 namespace DataVisualizationApp.ViewModels
 {
     public class Nr3PieChartViewModel : INotifyPropertyChanged
     {
-        private IEnumerable<ISeries> _series = new List<ISeries>(); // Initialize with an empty collection
+        private IEnumerable<ISeries> _series = new List<ISeries>();
         public IEnumerable<ISeries> Series
         {
             get => _series;
@@ -23,7 +27,6 @@ namespace DataVisualizationApp.ViewModels
 
         private void LoadDataFromCSV()
         {
-            // Load the student data
             List<StudentPerformance> students = CsvService.LoadCsv();
 
             // If needed, filter by parental education level
@@ -39,8 +42,6 @@ namespace DataVisualizationApp.ViewModels
                     Count = g.Count()
                 })
                 .ToList();
-
-            // Create PieSeries for each score range from the query results
             Series = allStudents.Select(kvp =>
                 new PieSeries<int>
                 {
@@ -50,7 +51,6 @@ namespace DataVisualizationApp.ViewModels
                 }).ToList();
         }
 
-        // Implement the PropertyChanged event
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)

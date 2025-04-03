@@ -1,0 +1,75 @@
+using SkiaSharp;
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+
+
+//Average Exam Score based on Physical Activity {bar chart}
+
+namespace DataVisualizationApp.ViewModels
+{
+    public class Nr4BarChartViewModel : INotifyPropertyChanged
+    {
+        private IEnumerable<ISeries> _series = new List<ISeries>();
+        public IEnumerable<ISeries> Series
+        {
+            get => _series;
+            set { _series = value; OnPropertyChanged(); }
+        }
+
+        private List<string> _labels = new List<string>();
+        public List<string> Labels
+        {
+            get => _labels;
+            set { _labels = value; OnPropertyChanged(); }
+        }
+
+        private readonly List<StudentPerformance> _data;
+
+        public Nr4BarChartViewModel()
+        {
+            _data = CsvService.LoadCsv(); 
+            LoadDataFromCSV();
+        }
+
+        private void LoadDataFromCSV()
+        {
+            var avgScoreByPhysicalActivity = _data
+                .GroupBy(d => d.Physical_Activity)
+                .Select(g => new
+                {
+                    PhysicalActivity = g.Key,
+                    AverageScore = g.Average(d => d.Exam_Score)
+                })
+                .ToList();
+
+            Labels = avgScoreByPhysicalActivity.Select(g => g.PhysicalActivity.ToString()).ToList();
+
+            Series = new List<ISeries>
+            {
+                new ColumnSeries<double> 
+                { 
+                    Values = avgScoreByPhysicalActivity.Select(g => g.AverageScore).ToList(),
+                    Name = "Avg Exam Score",
+                    MaxBarWidth = 50,
+                    Fill = new SolidColorPaint(SKColors.Green), 
+
+                    DataLabelsPaint = new SolidColorPaint(SKColors.Black), 
+                    DataLabelsPosition = LiveChartsCore.Measure.DataLabelsPosition.Top,
+                    DataLabelsSize = 16, 
+                }
+            };
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}

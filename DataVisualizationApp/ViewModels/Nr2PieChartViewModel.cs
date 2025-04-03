@@ -5,11 +5,15 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
+
+//Percentage of Students by peer influence  {pie chart}
+
+
 namespace DataVisualizationApp.ViewModels
 {
     public class Nr2PieChartViewModel : INotifyPropertyChanged
     {
-        private IEnumerable<ISeries> _series = new List<ISeries>(); // Initialize with an empty collection
+        private IEnumerable<ISeries> _series = new List<ISeries>(); 
         public IEnumerable<ISeries> Series
         {
             get => _series;
@@ -24,18 +28,14 @@ namespace DataVisualizationApp.ViewModels
         private void LoadDataFromCSV()
         {
             List<StudentPerformance> students = CsvService.LoadCsv();
-
-            // Group by Peer Influence and count the number of students in each group
             var peerInfluenceCounts = students
-                .GroupBy(s => s.Peer_Influence) // Group by Peer Influence
+                .GroupBy(s => s.Peer_Influence) 
                 .ToDictionary(g => g.Key, g => g.Count());
-
-            // Create PieSeries for each Peer Influence group with the count of students
             Series = peerInfluenceCounts.Select(kvp =>
                 new PieSeries<int>
                 {
-                    Values = new int[] { kvp.Value }, // Number of students in this Peer Influence group
-                    Name = $"{kvp.Key}" // Label showing the group and count
+                    Values = new int[] { kvp.Value },
+                    Name = $"{kvp.Key}" 
                 }).ToList();
         }
 

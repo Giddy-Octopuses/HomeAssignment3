@@ -8,7 +8,7 @@ namespace DataVisualizationApp.Views
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel();  // Set DataContext to the ViewModel
+            DataContext = new MainWindowViewModel();  
         }
     }
 }

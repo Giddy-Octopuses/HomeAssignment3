@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
+//Percentage of Students by School Type  {pie chart}
+
 namespace DataVisualizationApp.ViewModels;
 
 public class PieChartViewModel : INotifyPropertyChanged
