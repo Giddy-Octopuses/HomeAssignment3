@@ -5,10 +5,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-
-// Create PieSeries for students with Postgraduate parental education level and Group students by their exam score ranges
-
-
 namespace DataVisualizationApp.ViewModels
 {
     public class Nr3PieChartViewModel : INotifyPropertyChanged
@@ -30,48 +26,28 @@ namespace DataVisualizationApp.ViewModels
             // Load the student data
             List<StudentPerformance> students = CsvService.LoadCsv();
 
-            // Filter out students with Postgraduate parental education level
-            var postgraduateStudents = students.Where(s => s.Parental_Education_Level == "Postgraduate").ToList();
-            var totalStudents = postgraduateStudents.Count;
+            // If needed, filter by parental education level
+            // var postgraduateParentalEducation = students
+            //     .Where(s => s.Parental_Education_Level == "Postgraduate");
 
-            // Define the score ranges
-            var scoreRanges = new Dictionary<string, int>
-            {
-                { "50-60", 0 },
-                { "61-70", 0 },
-                { "71-80", 0 },
-                { "81-90", 0 },
-                { "91-100", 0 }
-            };
-
-            // Group students by their exam score ranges
-            foreach (var student in postgraduateStudents)
-            {
-                string scoreRange = GetScoreRange(student.Exam_Score);
-                if (scoreRanges.ContainsKey(scoreRange))
+            // Include all students regardless of parental education level
+            var allStudents = students
+                .GroupBy(s => s.Exam_Score / 10)
+                .Select(g => new
                 {
-                    scoreRanges[scoreRange]++;
-                }
-            }
+                    ScoreRange = g.Key * 10 + "-" + ((g.Key + 1) * 10 - 1),
+                    Count = g.Count()
+                })
+                .ToList();
 
-            // Create PieSeries for each score range
-            Series = scoreRanges.Select(kvp =>
+            // Create PieSeries for each score range from the query results
+            Series = allStudents.Select(kvp =>
                 new PieSeries<int>
                 {
-                    Values = [kvp.Value],
-                    Name = $"{kvp.Key}",
+                    Values = new int[] { kvp.Count },
+                    Name = $"{kvp.ScoreRange}",
                     DataLabelsFormatter = point => $"{point.Context.DataSource}" // Display the number of students
                 }).ToList();
-        }
-
-        // Method to determine the score range based on the exam score
-        private string GetScoreRange(double score)
-        {
-            if (score <= 60) return "50-60";
-            if (score <= 70) return "61-70";
-            if (score <= 80) return "71-80";
-            if (score <= 90) return "81-90";
-            return "91-100";
         }
 
         // Implement the PropertyChanged event
