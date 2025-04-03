@@ -58,8 +58,8 @@ namespace DataVisualizationApp.ViewModels
             Series = scoreRanges.Select(kvp =>
                 new PieSeries<int>
                 {
-                    Values = new int[] { kvp.Value },
-                    Name = $"{kvp.Key} ({kvp.Value} students)",
+                    Values = [kvp.Value],
+                    Name = $"{kvp.Key}",
                     DataLabelsFormatter = point => $"{point.Context.DataSource}" // Display the number of students
                 }).ToList();
         }
