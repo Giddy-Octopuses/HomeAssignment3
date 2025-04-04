@@ -10,6 +10,10 @@ using System.Runtime.CompilerServices;
 
 //Average Exam Score based on Physical Activity {bar chart}
 
+
+// to add for avering only few numbers after comma
+// also there is some numbers showing in black
+
 namespace DataVisualizationApp.ViewModels
 {
     public class Nr4BarChartViewModel : INotifyPropertyChanged

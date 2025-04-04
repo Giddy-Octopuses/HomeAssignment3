@@ -7,7 +7,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using LiveChartsCore.SkiaSharpView.Painting;
 
-/// Motivation Level by gender {Dohnut chart}
+// Motivation Level by gender {Dohnut chart}
+// to add for avering only few numbers after comma
+
 
 namespace DataVisualizationApp.ViewModels
 {
