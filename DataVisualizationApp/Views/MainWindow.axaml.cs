@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Controls.Primitives;
+using DataVisualizationApp.ViewModels;
 
 namespace DataVisualizationApp.Views
 {
@@ -13,6 +14,7 @@ namespace DataVisualizationApp.Views
         {
             InitializeComponent();
             popup = this.FindControl<Popup>("Popup");
+            DataContext = new MainWindowViewModel();
         }
     }
 }

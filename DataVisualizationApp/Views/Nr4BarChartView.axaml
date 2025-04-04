@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:DataVisualizationApp.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="DataVisualizationApp.Views.Nr4BarChartView"
+             x:DataType="vm:Nr4BarChartViewModel"
+             xmlns:vms="using:ViewModelsSamples.Axes.LabelsFormat"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia">
+
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+
+        <TextBlock Text="Average Exam Score based on Physical Activity" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Margin="15"/>
+
+        <lvc:CartesianChart Series="{Binding Series}" Width="800" Height="550"/>
+
+    </StackPanel>
+</UserControl>
