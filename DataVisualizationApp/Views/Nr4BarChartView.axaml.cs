@@ -7,7 +7,7 @@ namespace DataVisualizationApp.Views
     {
         public Nr4BarChartView()
         {
-            InitializeComponent(); 
+            InitializeComponent();
             DataContext = new Nr4BarChartViewModel();
         }
     }

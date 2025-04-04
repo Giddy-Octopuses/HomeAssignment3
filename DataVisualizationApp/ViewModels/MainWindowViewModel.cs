@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 namespace DataVisualizationApp.ViewModels;
 
-    public partial class MainWindowViewModel : ViewModelBase
-    {
+public partial class MainWindowViewModel : ViewModelBase
+{
     public string Greeting { get; } = "Welcome to Avalonia!";
-        private readonly List<StudentPerformance> _data;
+    private readonly List<StudentPerformance> _data;
 
-        public MainWindowViewModel()
-        {
-            _data = CsvService.LoadCsv();
+    public MainWindowViewModel()
+    {
+        _data = CsvService.LoadCsv();
 
-            Console.WriteLine($"Loaded {_data.Count} records from CSV.");
+        Console.WriteLine($"Loaded {_data.Count} records from CSV.");
     }
 
     public void PresetQueries()

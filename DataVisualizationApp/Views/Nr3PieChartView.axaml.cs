@@ -7,7 +7,7 @@ namespace DataVisualizationApp.Views
     {
         public Nr3PieChartView()
         {
-            InitializeComponent(); 
+            InitializeComponent();
             DataContext = new Nr3PieChartViewModel();
         }
     }

@@ -4,11 +4,11 @@ using LiveChartsCore.SkiaSharpView;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System;
 using System.Runtime.CompilerServices;
 using LiveChartsCore.SkiaSharpView.Painting;
 
 // Motivation Level by gender {Dohnut chart}
-// to add for avering only few numbers after comma
 
 
 namespace DataVisualizationApp.ViewModels
@@ -53,7 +53,7 @@ namespace DataVisualizationApp.ViewModels
                 .Select(g => new
                 {
                     Gender = g.Key,
-                    AverageMotivation = g.Average(d => motivationMapping[d.Motivation_Level]) 
+                    AverageMotivation = Math.Round(g.Average(d => motivationMapping[d.Motivation_Level]), 3) 
                 })
                 .ToList();
 
@@ -64,20 +64,20 @@ namespace DataVisualizationApp.ViewModels
                 // Inner part ( Male)
                 new PieSeries<double>
                 {
-                    Values = new List<double> { avgMotivationByGender.FirstOrDefault(g => g.Gender == "Male")?.AverageMotivation ?? 0 },
+                    Values = [avgMotivationByGender.FirstOrDefault(g => g.Gender == "Male")?.AverageMotivation ?? 0],
                     Name = "Male",
-                    Fill = new SolidColorPaint(SKColors.LightBlue), 
+                    Fill = new SolidColorPaint(SKColors.LightBlue),
                     Stroke = new SolidColorPaint(SKColors.DarkBlue),
-                    InnerRadius = 0 
+                    InnerRadius = 0
                 },
                 // Outer part ( Female)
                 new PieSeries<double>
                 {
-                    Values = new List<double> { avgMotivationByGender.FirstOrDefault(g => g.Gender == "Female")?.AverageMotivation ?? 0 },
+                    Values = [avgMotivationByGender.FirstOrDefault(g => g.Gender == "Female")?.AverageMotivation ?? 0],
                     Name = "Female",
-                    Fill = new SolidColorPaint(SKColors.Pink), 
+                    Fill = new SolidColorPaint(SKColors.Pink),
                     Stroke = new SolidColorPaint(SKColors.White),
-                    InnerRadius = 40 
+                    InnerRadius = 40
                 }
             };
         }

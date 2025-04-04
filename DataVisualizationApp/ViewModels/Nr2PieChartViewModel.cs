@@ -34,7 +34,7 @@ namespace DataVisualizationApp.ViewModels
             Series = peerInfluenceCounts.Select(kvp =>
                 new PieSeries<int>
                 {
-                    Values = new int[] { kvp.Value },
+                    Values = [kvp.Value],
                     Name = $"{kvp.Key}" 
                 }).ToList();
         }

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 
 
-//Students with Exam Score [could be a pie chart with exam scores 0-10; 11-20; 21-30 and so on]
+//Students with Exam Score [a pie chart with exam scores 0-10; 11-20; 21-30 and so on]
 
 
 namespace DataVisualizationApp.ViewModels

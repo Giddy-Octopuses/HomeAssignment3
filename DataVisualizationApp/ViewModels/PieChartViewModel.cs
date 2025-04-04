@@ -19,9 +19,9 @@ public class PieChartViewModel : INotifyPropertyChanged
     }
 
     public PieChartViewModel()
-{
+    {
         LoadDataFromCSV();
-}
+    }
 
     private void LoadDataFromCSV()
     {
@@ -32,7 +32,7 @@ public class PieChartViewModel : INotifyPropertyChanged
             .ToDictionary(g => g.Key, g => g.Count());
 
         Series = schoolCounts.Select(kvp =>
-            new PieSeries<int> { Values = new int[] { kvp.Value }, Name = kvp.Key }).ToList();
+            new PieSeries<int> { Values = [kvp.Value], Name = kvp.Key }).ToList();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

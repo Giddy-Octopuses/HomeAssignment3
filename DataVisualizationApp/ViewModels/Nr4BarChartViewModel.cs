@@ -5,14 +5,12 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System;
 using System.Runtime.CompilerServices;
 
 
 //Average Exam Score based on Physical Activity {bar chart}
 
-
-// to add for avering only few numbers after comma
-// also there is some numbers showing in black
 
 namespace DataVisualizationApp.ViewModels
 {
@@ -36,7 +34,7 @@ namespace DataVisualizationApp.ViewModels
 
         public Nr4BarChartViewModel()
         {
-            _data = CsvService.LoadCsv(); 
+            _data = CsvService.LoadCsv();
             LoadDataFromCSV();
         }
 
@@ -47,7 +45,7 @@ namespace DataVisualizationApp.ViewModels
                 .Select(g => new
                 {
                     PhysicalActivity = g.Key,
-                    AverageScore = g.Average(d => d.Exam_Score)
+                    AverageScore = Math.Round(g.Average(d => d.Exam_Score), 1)
                 })
                 .ToList();
 
@@ -55,16 +53,17 @@ namespace DataVisualizationApp.ViewModels
 
             Series = new List<ISeries>
             {
-                new ColumnSeries<double> 
-                { 
+                new ColumnSeries<double>
+                {
                     Values = avgScoreByPhysicalActivity.Select(g => g.AverageScore).ToList(),
-                    Name = "Avg Exam Score",
+                    Name = "Average Exam Score",
                     MaxBarWidth = 50,
-                    Fill = new SolidColorPaint(SKColors.Green), 
+                    Fill = new SolidColorPaint(SKColors.Green),
 
-                    DataLabelsPaint = new SolidColorPaint(SKColors.Black), 
+                    DataLabelsPaint = new SolidColorPaint(SKColors.Black),
                     DataLabelsPosition = LiveChartsCore.Measure.DataLabelsPosition.Top,
-                    DataLabelsSize = 16, 
+                    DataLabelsSize = 16,
+                    DataLabelsFormatter = point => point.Model.ToString("0.0")
                 }
             };
         }
