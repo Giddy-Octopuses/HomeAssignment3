@@ -3,12 +3,12 @@ using DataVisualizationApp.ViewModels;
 
 namespace DataVisualizationApp.Views
 {
-    public partial class MainWindow : Window
+    public partial class Nr3PieChartView : UserControl
     {
-        public MainWindow()
+        public Nr3PieChartView()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
+            DataContext = new Nr3PieChartViewModel();
         }
     }
 }

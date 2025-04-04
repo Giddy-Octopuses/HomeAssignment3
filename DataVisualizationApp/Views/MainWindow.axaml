@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:DataVisualizationApp.ViewModels"
+        xmlns:views="using:DataVisualizationApp.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -10,11 +11,30 @@
         Title="DataVisualizationApp">
 
     <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <TabControl>
+        <TabItem Header="Pie Chart 1">
+            <views:PieChartView />
+        </TabItem>
+
+        <TabItem Header="Pie Chart 2">
+            <views:Nr2PieChartView />
+        </TabItem>
+
+        <TabItem Header="Pie Chart 3">
+            <views:Nr3PieChartView />
+        </TabItem>
+        <TabItem Header="Pie Chart 4">
+            <views:Nr5PieChartView />
+        </TabItem>
+        <TabItem Header="Pie Chart 5">
+            <views:Nr6PieChartView />
+        </TabItem>
+        <TabItem Header="Bar Chart 1">
+            <views:Nr4BarChartView />
+        </TabItem>
+    </TabControl>
 
 </Window>
