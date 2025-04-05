@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-namespace DataVisualizationApp.ViewModels;
 
 using System.ComponentModel;
 using System.Globalization;
@@ -13,6 +12,8 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
+namespace DataVisualizationApp.ViewModels;
+
 public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly List<StudentPerformance> _data;
@@ -21,11 +22,22 @@ public partial class MainWindowViewModel : ViewModelBase
     {
 
         _data = CsvService.LoadCsv();
-
         Console.WriteLine($"Loaded {_data.Count} records from CSV.");
+
+        Queries = new List<string>
+        {
+            "Number of Students by School Type",
+            "Number of Students by Peer Influence",
+            "Average Exam Score of Students",
+            "Average Exam Score by Physical Activity",
+            "Average Sleep Hours of Students",
+            "Motivation Level by Gender"
+        };
     }
 
+    public List<string> Queries { get; }
     [ObservableProperty] private string? selectedQuery;
+    [ObservableProperty] private ViewModelBase? selectedChartViewModel;
     [ObservableProperty] private bool popupOpen;
     [ObservableProperty] private string message = string.Empty;
     [ObservableProperty] private string colour = string.Empty;
@@ -42,7 +54,20 @@ public partial class MainWindowViewModel : ViewModelBase
         else
         {
             Console.WriteLine("Add Chart command executed.");
-        }
+            Console.WriteLine($"Selected query: {SelectedQuery}");
+
+            // Map the selected query to the corresponding ViewModel
+            SelectedChartViewModel = SelectedQuery switch
+            {
+                "Number of Students by School Type" => new PieChartViewModel(),
+                "Number of Students by Peer Influence" => new Nr2PieChartViewModel(),
+                "Average Exam Score of Students" => new Nr3PieChartViewModel(),
+                "Average Exam Score by Physical Activity" => new Nr4BarChartViewModel(),
+                "Average Sleep Hours of Students" => new Nr5PieChartViewModel(),
+                "Motivation Level by Gender" => new Nr6PieChartViewModel(),
+                _ => null
+            };
+        } 
     }
 
     [RelayCommand]

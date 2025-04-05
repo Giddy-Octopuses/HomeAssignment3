@@ -40,12 +40,10 @@
                 <ColumnDefinition Width="1*" /> 
             </Grid.ColumnDefinitions>
 
-            <ComboBox Grid.Column="0" SelectedItem="{Binding SelectedQuery}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10" PlaceholderText="Choose from the queries...">
-                <ComboBoxItem Content="Query 1" />
-                <ComboBoxItem Content="Query 2" />
-                <ComboBoxItem Content="Query 3" />
-                <ComboBoxItem Content="Query 4" />
-            </ComboBox>
+            <ComboBox Grid.Column="0" ItemsSource="{Binding Queries}" SelectedItem="{Binding SelectedQuery}"
+             MaxDropDownHeight="100" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10"
+             PlaceholderText="Choose from the queries..." />
+
             <Button Grid.Column="1" Content="Add chart" Command="{Binding AddChart}" Background="MediumSeaGreen" HorizontalAlignment="Stretch" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10" />
             <Button Grid.Column="2" Content="Delete chart" Command="{Binding DeleteChart}" Background="IndianRed" HorizontalAlignment="Stretch" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10"
                     IsVisible="{Binding DeleteButtonVisible}" />
@@ -68,8 +66,29 @@
                 <ColumnDefinition Width="*" /> 
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="1" Background="LightGreen" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="First Chart Placeholder" />
+            <Border Grid.Column="1" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <ContentControl Content="{Binding SelectedChartViewModel}">
+                    <ContentControl.DataTemplates>
+                        <DataTemplate DataType="{x:Type vm:PieChartViewModel}">
+                            <views:PieChartView />
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type vm:Nr2PieChartViewModel}">
+                            <views:Nr2PieChartView />
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type vm:Nr3PieChartViewModel}">
+                            <views:Nr3PieChartView />
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type vm:Nr4BarChartViewModel}">
+                            <views:Nr4BarChartView />
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type vm:Nr5PieChartViewModel}">
+                            <views:Nr5PieChartView />
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type vm:Nr6PieChartViewModel}">
+                            <views:Nr6PieChartView />
+                        </DataTemplate>
+                    </ContentControl.DataTemplates>
+                </ContentControl>
             </Border>
 
             <Border Grid.Column="3" Background="DarkGreen" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">

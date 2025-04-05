@@ -6,12 +6,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 
 
-//Number of Students by peer influence  {pie chart}
+//Number of Students by Peer Influence  {pie chart}
 
 
 namespace DataVisualizationApp.ViewModels
 {
-    public class Nr2PieChartViewModel : INotifyPropertyChanged
+    public class Nr2PieChartViewModel : ViewModelBase // INotifyPropertyChanged
     {
         private IEnumerable<ISeries> _series = new List<ISeries>(); 
         public IEnumerable<ISeries> Series

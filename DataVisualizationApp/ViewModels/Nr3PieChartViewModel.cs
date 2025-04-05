@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 
 namespace DataVisualizationApp.ViewModels
 {
-    public class Nr3PieChartViewModel : INotifyPropertyChanged
+    public class Nr3PieChartViewModel : ViewModelBase
     {
         private IEnumerable<ISeries> _series = new List<ISeries>();
         public IEnumerable<ISeries> Series
