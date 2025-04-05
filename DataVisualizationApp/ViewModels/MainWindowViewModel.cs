@@ -35,8 +35,8 @@ public partial class MainWindowViewModel : ViewModelBase
             "Motivation Level by Gender"
         };
 
-        // Initialize chart slots (4 slots, all empty initially)
-        ChartSlots = new ObservableCollection<ViewModelBase?>(new ViewModelBase?[4]);
+        // Initialize chart slots (6 slots, all empty initially)
+        ChartSlots = new ObservableCollection<ViewModelBase?>(new ViewModelBase?[6]);
         SelectedChartIndex = -1; // No chart is selected initially
     }
 
@@ -49,6 +49,20 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private string message = string.Empty;
     [ObservableProperty] private string colour = string.Empty;
     [ObservableProperty] private bool deleteButtonVisible = false; // Initially hidden; appears when you click on a chart
+    [ObservableProperty] private bool isScrollBarVisible = false; // Initially hidden; appears when there are more than 4 charts
+
+    private void UpdateIsScrollBarVisible()
+    {
+        // Check if there are more than 4 charts
+        var newValue = ChartSlots.Count > 4 && (ChartSlots[4] != null || ChartSlots[5] != null);
+
+        // Only update and notify if the value has changed
+        if (IsScrollBarVisible != newValue)
+        {
+            IsScrollBarVisible = newValue;
+            OnPropertyChanged(nameof(IsScrollBarVisible));
+        }
+    }
 
     [RelayCommand]
     public async Task AddChart()
@@ -58,42 +72,44 @@ public partial class MainWindowViewModel : ViewModelBase
             await ShowPopup("Error: Please choose a query before clicking 'Add chart'.", "Red");
             return;
         }
-        else
+
+        Console.WriteLine("Add Chart command executed.");
+        Console.WriteLine($"Selected query: {SelectedQuery}");
+
+        // Map the selected query to the corresponding ViewModel
+        ViewModelBase? newChart = SelectedQuery switch
         {
-            Console.WriteLine("Add Chart command executed.");
-            Console.WriteLine($"Selected query: {SelectedQuery}");
+            "Number of Students by School Type" => new PieChartViewModel(),
+            "Number of Students by Peer Influence" => new Nr2PieChartViewModel(),
+            "Average Exam Score of Students" => new Nr3PieChartViewModel(),
+            "Average Exam Score by Physical Activity" => new Nr4BarChartViewModel(),
+            "Average Sleep Hours of Students" => new Nr5PieChartViewModel(),
+            "Motivation Level by Gender" => new Nr6PieChartViewModel(),
+            _ => null
+        };
 
-            // Map the selected query to the corresponding ViewModel
-            ViewModelBase? newChart = SelectedQuery switch
+        if (newChart == null) return;
+
+        // Find the first empty slot and add the chart there
+        for (int i = 0; i < ChartSlots.Count; i++)
+        {
+            if (ChartSlots[i] == null)
             {
-                "Number of Students by School Type" => new PieChartViewModel(),
-                "Number of Students by Peer Influence" => new Nr2PieChartViewModel(),
-                "Average Exam Score of Students" => new Nr3PieChartViewModel(),
-                "Average Exam Score by Physical Activity" => new Nr4BarChartViewModel(),
-                "Average Sleep Hours of Students" => new Nr5PieChartViewModel(),
-                "Motivation Level by Gender" => new Nr6PieChartViewModel(),
-                _ => null
-            };
+                ChartSlots[i] = newChart;
 
-            if (newChart == null) return;
+                // Remove the selected query from the list to prevent re-adding it
+                Queries.Remove(SelectedQuery);
+                SelectedQuery = null;
 
-            // Find the first empty slot and add the chart there
-            for (int i = 0; i < ChartSlots.Count; i++)
-            {
-                if (ChartSlots[i] == null)
-                {
-                    ChartSlots[i] = newChart;
+                UpdateIsScrollBarVisible();
 
-                    // Remove the selected query from the list to prevent re-adding it
-                    Queries.Remove(SelectedQuery);
-                    SelectedQuery = null;
-                    return;
-                }
+                return;
             }
-
-            // If all slots are filled -- WILL BE DELETED LATER
-            await ShowPopup("Error: All chart slots are filled. Please delete a chart before adding a new one.", "Red");
         }
+
+        // If all slots are filled -- WILL BE DELETED LATER
+        await ShowPopup("Error: All chart slots are filled. Please delete a chart before adding a new one.", "Red");
+
     }
 
     [RelayCommand]
@@ -148,6 +164,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
         SelectedChartIndex = -1; // Reset the selection
         DeleteButtonVisible = false;
+
+        UpdateIsScrollBarVisible();
 
         if (App.Current.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
         {

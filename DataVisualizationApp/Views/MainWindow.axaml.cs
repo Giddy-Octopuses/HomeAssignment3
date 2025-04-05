@@ -33,10 +33,17 @@ namespace DataVisualizationApp.Views
                 }
 
                 // Determine the slot index based on the Border's Grid.Column and Grid.Row properties
-                var slotIndex = (Grid.GetRow(border) == 4 && Grid.GetColumn(border) == 1) ? 0 :
+                /* var slotIndex = (Grid.GetRow(border) == 4 && Grid.GetColumn(border) == 1) ? 0 :
                                 (Grid.GetRow(border) == 4 && Grid.GetColumn(border) == 3) ? 1 :
                                 (Grid.GetRow(border) == 5 && Grid.GetColumn(border) == 1) ? 2 :
-                                (Grid.GetRow(border) == 5 && Grid.GetColumn(border) == 3) ? 3 : -1;             
+                                (Grid.GetRow(border) == 5 && Grid.GetColumn(border) == 3) ? 3 : -1;    */     
+
+                var slotIndex = (Grid.GetRow(border) == 0 && Grid.GetColumn(border) == 1) ? 0 :
+                                (Grid.GetRow(border) == 0 && Grid.GetColumn(border) == 3) ? 1 :
+                                (Grid.GetRow(border) == 1 && Grid.GetColumn(border) == 1) ? 2 :
+                                (Grid.GetRow(border) == 1 && Grid.GetColumn(border) == 3) ? 3 :
+                                (Grid.GetRow(border) == 2 && Grid.GetColumn(border) == 1) ? 4 :
+                                (Grid.GetRow(border) == 2 && Grid.GetColumn(border) == 3) ? 5 : -1;                 
 
                 if (slotIndex == -1) return; // Invalid slot index
 
@@ -74,7 +81,7 @@ namespace DataVisualizationApp.Views
             }
         }
 
-        // Handle unclicking after deletion
+        // Handle unclicking after deletion   
         public void UnselectBorder()
         {
             if (_previousSelectedBorder != null)

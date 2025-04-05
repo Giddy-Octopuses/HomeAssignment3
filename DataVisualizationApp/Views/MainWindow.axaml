@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:DataVisualizationApp.ViewModels"
         xmlns:views="using:DataVisualizationApp.Views"
+        xmlns:converters="using:DataVisualizationApp.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -13,6 +14,10 @@
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
+
+    <Window.Resources>
+        <converters:BooleanToScrollBarVisibilityConverter x:Key="ScrollBarVisibilityConverter" />
+    </Window.Resources>
 
     <Window.Styles>
         <!-- Style for chart slot borders before and after clicking on them -->
@@ -26,13 +31,11 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1.2*" /> <!-- Title -->
-            <RowDefinition Height="1.5*" /> <!-- Short Description -->
-            <RowDefinition Height="1*" /> <!-- ComboBox and Button -->
-            <RowDefinition Height="0.8*" /> <!-- Pop-up messages -->
-            <RowDefinition Height="5.6*" /> <!-- First & Second Chart -->
-            <RowDefinition Height="5.6*" /> <!-- Third & Fourth Chart -->
-            <RowDefinition Height="*" /> <!-- Remaining space -->
+            <RowDefinition Height="1.2*" /> <!-- Title 1.2* -->
+            <RowDefinition Height="1.5*" /> <!-- Short Description 1.5* -->
+            <RowDefinition Height="1*" /> <!-- ComboBox and Button 1* -->
+            <RowDefinition Height="0.8*" /> <!-- Pop-up messages 0.8* -->
+            <RowDefinition Height="460" /> <!-- Scrollable Chart Area 11.2* -->
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0" Background="MediumPurple" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="0,20,0,20">
@@ -67,130 +70,188 @@
             </Popup>
         </Grid>
 
+        <!-- Scrollable Chart Area -->
         <Grid Grid.Row="4" Margin="10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" /> 
-                <ColumnDefinition Width="3*" /> 
-                <ColumnDefinition Width="*" /> 
-                <ColumnDefinition Width="3*" /> 
-                <ColumnDefinition Width="*" /> 
-            </Grid.ColumnDefinitions>
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="{Binding IsScrollBarVisible, Converter={StaticResource ScrollBarVisibilityConverter}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="230" /> <!-- First & Second Chart -->
+                        <RowDefinition Height="230" /> <!-- Third & Fourth Chart -->
+                        <RowDefinition Height="230" /> <!-- Fifth & Sixth Chart -->
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-            <!-- First chart placeholder -->
-            <Border Classes="chart-slot" Grid.Column="1" Grid.Row="4" PointerPressed="OnChartSlotPointerPressed"
-            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <ContentControl Content="{Binding ChartSlots[0]}">
-                    <ContentControl.DataTemplates>
-                        <DataTemplate DataType="{x:Type vm:PieChartViewModel}">
-                            <views:PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr2PieChartViewModel}">
-                            <views:Nr2PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr3PieChartViewModel}">
-                            <views:Nr3PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr4BarChartViewModel}">
-                            <views:Nr4BarChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr5PieChartViewModel}">
-                            <views:Nr5PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr6PieChartViewModel}">
-                            <views:Nr6PieChartView />
-                        </DataTemplate>
-                    </ContentControl.DataTemplates>
-                </ContentControl>
-            </Border>
+                    <!-- First chart placeholder -->
+                    <Border Classes="chart-slot" Grid.Column="1" Grid.Row="0" PointerPressed="OnChartSlotPointerPressed"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <ContentControl Content="{Binding ChartSlots[0]}">
+                            <ContentControl.DataTemplates>
+                                <DataTemplate DataType="{x:Type vm:PieChartViewModel}">
+                                    <views:PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr2PieChartViewModel}">
+                                    <views:Nr2PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr3PieChartViewModel}">
+                                    <views:Nr3PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr4BarChartViewModel}">
+                                    <views:Nr4BarChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr5PieChartViewModel}">
+                                    <views:Nr5PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr6PieChartViewModel}">
+                                    <views:Nr6PieChartView />
+                                </DataTemplate>
+                            </ContentControl.DataTemplates>
+                        </ContentControl>
+                    </Border>
 
-            <Border Classes="chart-slot" Grid.Column="3" Grid.Row="4" PointerPressed="OnChartSlotPointerPressed"
-            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">    
-                <ContentControl Content="{Binding ChartSlots[1]}">
-                    <ContentControl.DataTemplates>
-                        <DataTemplate DataType="{x:Type vm:PieChartViewModel}">
-                            <views:PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr2PieChartViewModel}">
-                            <views:Nr2PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr3PieChartViewModel}">
-                            <views:Nr3PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr4BarChartViewModel}">
-                            <views:Nr4BarChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr5PieChartViewModel}">
-                            <views:Nr5PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr6PieChartViewModel}">
-                            <views:Nr6PieChartView />
-                        </DataTemplate>
-                    </ContentControl.DataTemplates>
-                </ContentControl>
-            </Border>
+                    <!-- Second chart placeholder -->
+                    <Border Classes="chart-slot" Grid.Column="3" Grid.Row="0" PointerPressed="OnChartSlotPointerPressed"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <ContentControl Content="{Binding ChartSlots[1]}">
+                            <ContentControl.DataTemplates>
+                                <DataTemplate DataType="{x:Type vm:PieChartViewModel}">
+                                    <views:PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr2PieChartViewModel}">
+                                    <views:Nr2PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr3PieChartViewModel}">
+                                    <views:Nr3PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr4BarChartViewModel}">
+                                    <views:Nr4BarChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr5PieChartViewModel}">
+                                    <views:Nr5PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr6PieChartViewModel}">
+                                    <views:Nr6PieChartView />
+                                </DataTemplate>
+                            </ContentControl.DataTemplates>
+                        </ContentControl>
+                    </Border>
+
+                    <!-- Third chart placeholder -->
+                    <Border Classes="chart-slot" Grid.Column="1" Grid.Row="1" PointerPressed="OnChartSlotPointerPressed"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <ContentControl Content="{Binding ChartSlots[2]}">
+                            <ContentControl.DataTemplates>
+                                <DataTemplate DataType="{x:Type vm:PieChartViewModel}">
+                                    <views:PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr2PieChartViewModel}">
+                                    <views:Nr2PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr3PieChartViewModel}">
+                                    <views:Nr3PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr4BarChartViewModel}">
+                                    <views:Nr4BarChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr5PieChartViewModel}">
+                                    <views:Nr5PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr6PieChartViewModel}">
+                                    <views:Nr6PieChartView />
+                                </DataTemplate>
+                            </ContentControl.DataTemplates>
+                        </ContentControl>
+                    </Border>
+
+                    <!-- Fourth chart placeholder -->
+                    <Border Classes="chart-slot" Grid.Column="3" Grid.Row="1" PointerPressed="OnChartSlotPointerPressed"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <ContentControl Content="{Binding ChartSlots[3]}">
+                            <ContentControl.DataTemplates>
+                                <DataTemplate DataType="{x:Type vm:PieChartViewModel}">
+                                    <views:PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr2PieChartViewModel}">
+                                    <views:Nr2PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr3PieChartViewModel}">
+                                    <views:Nr3PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr4BarChartViewModel}">
+                                    <views:Nr4BarChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr5PieChartViewModel}">
+                                    <views:Nr5PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr6PieChartViewModel}">
+                                    <views:Nr6PieChartView />
+                                </DataTemplate>
+                            </ContentControl.DataTemplates>
+                        </ContentControl>
+                    </Border>
+
+                    <!-- Fifth chart placeholder -->
+                    <Border Classes="chart-slot" Grid.Column="1" Grid.Row="2" PointerPressed="OnChartSlotPointerPressed"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <ContentControl Content="{Binding ChartSlots[4]}">
+                            <ContentControl.DataTemplates>
+                                <DataTemplate DataType="{x:Type vm:PieChartViewModel}">
+                                    <views:PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr2PieChartViewModel}">
+                                    <views:Nr2PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr3PieChartViewModel}">
+                                    <views:Nr3PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr4BarChartViewModel}">
+                                    <views:Nr4BarChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr5PieChartViewModel}">
+                                    <views:Nr5PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr6PieChartViewModel}">
+                                    <views:Nr6PieChartView />
+                                </DataTemplate>
+                            </ContentControl.DataTemplates>
+                        </ContentControl>
+                    </Border>
+
+                    <!-- Sixth chart placeholder -->
+                    <Border Classes="chart-slot" Grid.Column="3" Grid.Row="2" PointerPressed="OnChartSlotPointerPressed"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <ContentControl Content="{Binding ChartSlots[5]}">
+                            <ContentControl.DataTemplates>
+                                <DataTemplate DataType="{x:Type vm:PieChartViewModel}">
+                                    <views:PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr2PieChartViewModel}">
+                                    <views:Nr2PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr3PieChartViewModel}">
+                                    <views:Nr3PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr4BarChartViewModel}">
+                                    <views:Nr4BarChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr5PieChartViewModel}">
+                                    <views:Nr5PieChartView />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:Nr6PieChartViewModel}">
+                                    <views:Nr6PieChartView />
+                                </DataTemplate>
+                            </ContentControl.DataTemplates>
+                        </ContentControl>
+                    </Border>
+                </Grid>
+            </ScrollViewer>
         </Grid>
 
-        <Grid Grid.Row="5" Margin="10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="3*" /> 
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="3*" /> 
-                <ColumnDefinition Width="*" /> 
-            </Grid.ColumnDefinitions>
-
-            <Border Classes="chart-slot" Grid.Column="1" Grid.Row="5" PointerPressed="OnChartSlotPointerPressed"
-            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">    
-                <ContentControl Content="{Binding ChartSlots[2]}">
-                    <ContentControl.DataTemplates>
-                        <DataTemplate DataType="{x:Type vm:PieChartViewModel}">
-                            <views:PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr2PieChartViewModel}">
-                            <views:Nr2PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr3PieChartViewModel}">
-                            <views:Nr3PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr4BarChartViewModel}">
-                            <views:Nr4BarChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr5PieChartViewModel}">
-                            <views:Nr5PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr6PieChartViewModel}">
-                            <views:Nr6PieChartView />
-                        </DataTemplate>
-                    </ContentControl.DataTemplates>
-                </ContentControl>
-            </Border>
-
-            <Border Classes="chart-slot" Grid.Column="3" Grid.Row="5" PointerPressed="OnChartSlotPointerPressed"
-            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">    
-                <ContentControl Content="{Binding ChartSlots[3]}"> 
-                    <ContentControl.DataTemplates>
-                        <DataTemplate DataType="{x:Type vm:PieChartViewModel}">
-                            <views:PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr2PieChartViewModel}">
-                            <views:Nr2PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr3PieChartViewModel}">
-                            <views:Nr3PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr4BarChartViewModel}">
-                            <views:Nr4BarChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr5PieChartViewModel}">
-                            <views:Nr5PieChartView />
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type vm:Nr6PieChartViewModel}">
-                            <views:Nr6PieChartView />
-                        </DataTemplate>
-                    </ContentControl.DataTemplates>
-                </ContentControl>
-            </Border>
-        </Grid>
     </Grid>
 
 </Window>
