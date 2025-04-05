@@ -49,20 +49,6 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private string message = string.Empty;
     [ObservableProperty] private string colour = string.Empty;
     [ObservableProperty] private bool deleteButtonVisible = false; // Initially hidden; appears when you click on a chart
-    [ObservableProperty] private bool isScrollBarVisible = false; // Initially hidden; appears when there are more than 4 charts
-
-    private void UpdateIsScrollBarVisible()
-    {
-        // Check if there are more than 4 charts
-        var newValue = ChartSlots.Count > 4 && (ChartSlots[4] != null || ChartSlots[5] != null);
-
-        // Only update and notify if the value has changed
-        if (IsScrollBarVisible != newValue)
-        {
-            IsScrollBarVisible = newValue;
-            OnPropertyChanged(nameof(IsScrollBarVisible));
-        }
-    }
 
     [RelayCommand]
     public async Task AddChart()
@@ -101,15 +87,9 @@ public partial class MainWindowViewModel : ViewModelBase
                 Queries.Remove(SelectedQuery);
                 SelectedQuery = null;
 
-                UpdateIsScrollBarVisible();
-
                 return;
             }
         }
-
-        // If all slots are filled -- WILL BE DELETED LATER
-        await ShowPopup("Error: All chart slots are filled. Please delete a chart before adding a new one.", "Red");
-
     }
 
     [RelayCommand]
@@ -164,8 +144,6 @@ public partial class MainWindowViewModel : ViewModelBase
 
         SelectedChartIndex = -1; // Reset the selection
         DeleteButtonVisible = false;
-
-        UpdateIsScrollBarVisible();
 
         if (App.Current.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
         {

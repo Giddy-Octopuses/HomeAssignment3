@@ -2,7 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:DataVisualizationApp.ViewModels"
         xmlns:views="using:DataVisualizationApp.Views"
-        xmlns:converters="using:DataVisualizationApp.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -14,10 +13,6 @@
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-
-    <Window.Resources>
-        <converters:BooleanToScrollBarVisibilityConverter x:Key="ScrollBarVisibilityConverter" />
-    </Window.Resources>
 
     <Window.Styles>
         <!-- Style for chart slot borders before and after clicking on them -->
@@ -72,7 +67,7 @@
 
         <!-- Scrollable Chart Area -->
         <Grid Grid.Row="4" Margin="10">
-            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="{Binding IsScrollBarVisible, Converter={StaticResource ScrollBarVisibilityConverter}}">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="230" /> <!-- First & Second Chart -->
