@@ -24,7 +24,8 @@ public partial class MainWindowViewModel : ViewModelBase
         _data = CsvService.LoadCsv();
         Console.WriteLine($"Loaded {_data.Count} records from CSV.");
 
-        Queries = new List<string>
+        // Queries available for selection
+        Queries = new ObservableCollection<string>
         {
             "Number of Students by School Type",
             "Number of Students by Peer Influence",
@@ -33,9 +34,13 @@ public partial class MainWindowViewModel : ViewModelBase
             "Average Sleep Hours of Students",
             "Motivation Level by Gender"
         };
+
+        // Initialize chart slots (4 slots, all empty initially)
+        ChartSlots = new ObservableCollection<ViewModelBase?>(new ViewModelBase?[4]);
     }
 
-    public List<string> Queries { get; }
+    public ObservableCollection<string> Queries { get; }
+    public ObservableCollection<ViewModelBase?> ChartSlots { get; } 
     [ObservableProperty] private string? selectedQuery;
     [ObservableProperty] private ViewModelBase? selectedChartViewModel;
     [ObservableProperty] private bool popupOpen;
@@ -57,7 +62,7 @@ public partial class MainWindowViewModel : ViewModelBase
             Console.WriteLine($"Selected query: {SelectedQuery}");
 
             // Map the selected query to the corresponding ViewModel
-            SelectedChartViewModel = SelectedQuery switch
+            ViewModelBase? newChart = SelectedQuery switch
             {
                 "Number of Students by School Type" => new PieChartViewModel(),
                 "Number of Students by Peer Influence" => new Nr2PieChartViewModel(),
@@ -67,13 +72,40 @@ public partial class MainWindowViewModel : ViewModelBase
                 "Motivation Level by Gender" => new Nr6PieChartViewModel(),
                 _ => null
             };
-        } 
+
+            if (newChart == null) return;
+
+            // Find the first empty slot and add the chart there
+            for (int i = 0; i < ChartSlots.Count; i++)
+            {
+                if (ChartSlots[i] == null)
+                {
+                    ChartSlots[i] = newChart;
+
+                    // Remove the selected query from the list to prevent re-adding it
+                    Queries.Remove(SelectedQuery);
+                    SelectedQuery = null;
+                    return;
+                }
+            }
+
+            // If all slots are filled
+            await ShowPopup("Error: All chart slots are filled. Please delete a chart before adding a new one.", "Red");
+        }
     }
 
     [RelayCommand]
     public void DeleteChart()
     {
         Console.WriteLine("Delete Chart command executed.");
+
+        // Add the query back to the Queries list if it was removed
+        /* if (chartToRemove is PieChartViewModel) Queries.Add("Number of Students by School Type");
+        else if (chartToRemove is Nr2PieChartViewModel) Queries.Add("Number of Students by Peer Influence");
+        else if (chartToRemove is Nr3PieChartViewModel) Queries.Add("Average Exam Score of Students");
+        else if (chartToRemove is Nr4BarChartViewModel) Queries.Add("Average Exam Score by Physical Activity");
+        else if (chartToRemove is Nr5PieChartViewModel) Queries.Add("Average Sleep Hours of Students");
+        else if (chartToRemove is Nr6PieChartViewModel) Queries.Add("Motivation Level by Gender"); */
     }
 
     private async Task ShowPopup(string message, string colour, int duration = 3000)
@@ -212,5 +244,4 @@ public partial class MainWindowViewModel : ViewModelBase
             })
             .ToList();
     }
-
 }
