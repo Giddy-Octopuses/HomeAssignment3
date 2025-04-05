@@ -8,9 +8,9 @@ using Avalonia.Data.Converters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Avalonia.Controls;
-using System.Linq;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using DataVisualizationApp.Views;
 
 namespace DataVisualizationApp.ViewModels;
 
@@ -37,16 +37,18 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // Initialize chart slots (4 slots, all empty initially)
         ChartSlots = new ObservableCollection<ViewModelBase?>(new ViewModelBase?[4]);
+        SelectedChartIndex = -1; // No chart is selected initially
     }
 
     public ObservableCollection<string> Queries { get; }
-    public ObservableCollection<ViewModelBase?> ChartSlots { get; } 
+    public ObservableCollection<ViewModelBase?> ChartSlots { get; }
     [ObservableProperty] private string? selectedQuery;
     [ObservableProperty] private ViewModelBase? selectedChartViewModel;
+    [ObservableProperty] private int selectedChartIndex; // Tracks the selected chart slot index
     [ObservableProperty] private bool popupOpen;
     [ObservableProperty] private string message = string.Empty;
     [ObservableProperty] private string colour = string.Empty;
-    [ObservableProperty] private bool deleteButtonVisible = true; // THIS SHOULD BE CHANGED! -- initial: false; set to true when you click on a chart
+    [ObservableProperty] private bool deleteButtonVisible = false; // Initially hidden; appears when you click on a chart
 
     [RelayCommand]
     public async Task AddChart()
@@ -89,8 +91,25 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
             }
 
-            // If all slots are filled
+            // If all slots are filled -- WILL BE DELETED LATER
             await ShowPopup("Error: All chart slots are filled. Please delete a chart before adding a new one.", "Red");
+        }
+    }
+
+    [RelayCommand]
+    public void SelectChart(int slotIndex)
+    {
+        if (slotIndex >= 0 && slotIndex < ChartSlots.Count && ChartSlots[slotIndex] != null)
+        {
+            SelectedChartIndex = slotIndex;
+            DeleteButtonVisible = true; // Show the delete button
+            Console.WriteLine($"Chart in slot {slotIndex + 1} selected.");
+        }
+        else
+        {
+            SelectedChartIndex = -1;
+            DeleteButtonVisible = false; // Hide the delete button
+            Console.WriteLine("No chart selected.");
         }
     }
 
@@ -99,13 +118,44 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Console.WriteLine("Delete Chart command executed.");
 
+        // Validate SelectedChartIndex
+        if (SelectedChartIndex < 0 || SelectedChartIndex >= ChartSlots.Count)
+        {
+            Console.WriteLine("Error: SelectedChartIndex is out of range.");
+            return;
+        }
+
+        var chartToRemove = ChartSlots[SelectedChartIndex];
+
         // Add the query back to the Queries list if it was removed
-        /* if (chartToRemove is PieChartViewModel) Queries.Add("Number of Students by School Type");
+        if (chartToRemove is PieChartViewModel) Queries.Add("Number of Students by School Type");
         else if (chartToRemove is Nr2PieChartViewModel) Queries.Add("Number of Students by Peer Influence");
         else if (chartToRemove is Nr3PieChartViewModel) Queries.Add("Average Exam Score of Students");
         else if (chartToRemove is Nr4BarChartViewModel) Queries.Add("Average Exam Score by Physical Activity");
         else if (chartToRemove is Nr5PieChartViewModel) Queries.Add("Average Sleep Hours of Students");
-        else if (chartToRemove is Nr6PieChartViewModel) Queries.Add("Motivation Level by Gender"); */
+        else if (chartToRemove is Nr6PieChartViewModel) Queries.Add("Motivation Level by Gender");
+
+        // Shift charts left to fill empty spaces
+        for (int i = SelectedChartIndex; i < ChartSlots.Count - 1; i++)
+        {
+            ChartSlots[i] = ChartSlots[i + 1];
+        }
+
+        // Clear the last slot
+        ChartSlots[ChartSlots.Count - 1] = null;
+
+        Console.WriteLine($"Chart in slot {SelectedChartIndex + 1} deleted and charts shifted.");
+
+        SelectedChartIndex = -1; // Reset the selection
+        DeleteButtonVisible = false;
+
+        if (App.Current.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            if (desktop.MainWindow is MainWindow mainWindow)
+            {
+                mainWindow.UnselectBorder();
+            }
+        }
     }
 
     private async Task ShowPopup(string message, string colour, int duration = 3000)
