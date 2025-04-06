@@ -11,21 +11,14 @@ using System.Runtime.CompilerServices;
 
 namespace DataVisualizationApp.ViewModels
 {
-    public class Nr2PieChartViewModel : ViewModelBase // INotifyPropertyChanged
+    public class Nr2PieChartViewModel : ChartViewModelBase
     {
-        private IEnumerable<ISeries> _series = new List<ISeries>(); 
-        public IEnumerable<ISeries> Series
-        {
-            get => _series;
-            set { _series = value; OnPropertyChanged(); }
-        }
-
         public Nr2PieChartViewModel()
         {
-            LoadDataFromCSV();
+            LoadData();
         }
 
-        private void LoadDataFromCSV()
+        protected override void LoadData()
         {
             List<StudentPerformance> students = CsvService.LoadCsv();
             var peerInfluenceCounts = students
