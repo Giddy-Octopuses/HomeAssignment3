@@ -13,6 +13,7 @@ We chose the data about Student Performance and created six different charts.
 - Annalena:
     - Reading the csv file
     - Creating preset queries using LINQ
+    - Undo/Redo functionality
 - Gabija:
     - Creating the charts
 - Emma:
