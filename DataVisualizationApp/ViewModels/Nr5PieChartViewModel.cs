@@ -14,6 +14,10 @@ namespace DataVisualizationApp.ViewModels
 {
     public class Nr5PieChartViewModel : ChartViewModelBase
     {
+        public Nr5PieChartViewModel()
+        {
+            LoadData();
+        }
         protected override void LoadData()
         {
             List<StudentPerformance> students = CsvService.LoadCsv();

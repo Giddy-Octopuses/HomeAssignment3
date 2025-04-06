@@ -34,10 +34,8 @@ namespace DataVisualizationApp.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        // Constructor calls LoadData to populate the chart data
         public ChartViewModelBase()
         {
-            LoadData();
         }
     }
 }

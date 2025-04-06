@@ -13,6 +13,10 @@ namespace DataVisualizationApp.ViewModels
 {
     public class Nr2PieChartViewModel : ChartViewModelBase
     {
+        public Nr2PieChartViewModel()
+        {
+            LoadData();
+        }
 
         protected override void LoadData()
         {
