@@ -38,7 +38,7 @@ namespace DataVisualizationApp.Views
                                 (Grid.GetRow(border) == 1 && Grid.GetColumn(border) == 1) ? 2 :
                                 (Grid.GetRow(border) == 1 && Grid.GetColumn(border) == 3) ? 3 :
                                 (Grid.GetRow(border) == 2 && Grid.GetColumn(border) == 1) ? 4 :
-                                (Grid.GetRow(border) == 2 && Grid.GetColumn(border) == 3) ? 5 : -1;                 
+                                (Grid.GetRow(border) == 2 && Grid.GetColumn(border) == 3) ? 5 : -1;
 
                 if (slotIndex == -1) return; // Invalid slot index
 

@@ -1,10 +1,10 @@
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-
+using SkiaSharp;
+using System;
+using LiveChartsCore.SkiaSharpView.Painting;
 
 //Number of Students by Peer Influence  {pie chart}
 
@@ -22,13 +22,14 @@ namespace DataVisualizationApp.ViewModels
         {
             List<StudentPerformance> students = CsvService.LoadCsv();
             var peerInfluenceCounts = students
-                .GroupBy(s => s.Peer_Influence) 
+                .GroupBy(s => s.Peer_Influence)
                 .ToDictionary(g => g.Key, g => g.Count());
             Series = peerInfluenceCounts.Select(kvp =>
                 new PieSeries<int>
                 {
                     Values = [kvp.Value],
-                    Name = $"{kvp.Key}" 
+                    Stroke = new SolidColorPaint(SKColors.Black),
+                    Name = $"{kvp.Key}"
                 }).ToList();
         }
     }

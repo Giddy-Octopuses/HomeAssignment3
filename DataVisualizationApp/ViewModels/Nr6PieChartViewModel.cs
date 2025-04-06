@@ -2,10 +2,8 @@ using SkiaSharp;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System;
-using System.Runtime.CompilerServices;
 using LiveChartsCore.SkiaSharpView.Painting;
 
 // Motivation Level by gender {Dohnut chart}
@@ -41,12 +39,12 @@ namespace DataVisualizationApp.ViewModels
             };
 
             var avgMotivationByGender = _data
-                .Where(d => motivationMapping.ContainsKey(d.Motivation_Level)) 
+                .Where(d => motivationMapping.ContainsKey(d.Motivation_Level))
                 .GroupBy(d => d.Gender)
                 .Select(g => new
                 {
                     Gender = g.Key,
-                    AverageMotivation = Math.Round(g.Average(d => motivationMapping[d.Motivation_Level]), 3) 
+                    AverageMotivation = Math.Round(g.Average(d => motivationMapping[d.Motivation_Level]), 3)
                 })
                 .ToList();
 
@@ -60,10 +58,8 @@ namespace DataVisualizationApp.ViewModels
                     Values = [avgMotivationByGender.FirstOrDefault(g => g.Gender == "Male")?.AverageMotivation ?? 0],
                     Name = "Male",
                     Fill = new SolidColorPaint(SKColors.LightBlue),
-
-                    Stroke = new SolidColorPaint(SKColors.DarkBlue),
+                    Stroke = new SolidColorPaint(SKColors.Black),
                     InnerRadius = 40
-
                 },
                 // Outer part ( Female)
                 new PieSeries<double>

@@ -1,13 +1,14 @@
 using Avalonia.Controls;
 using DataVisualizationApp.ViewModels;
 
-namespace DataVisualizationApp.Views;
-
-public partial class PieChartView : UserControl
+namespace DataVisualizationApp.Views
 {
-    public PieChartView()
+    public partial class PieChartView : UserControl
     {
-        InitializeComponent();
-        DataContext = new PieChartViewModel();
+        public PieChartView()
+        {
+            InitializeComponent();
+            DataContext = new PieChartViewModel();
+        }
     }
 }

@@ -3,10 +3,9 @@ using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System;
-using System.Runtime.CompilerServices;
+
 
 
 //Average Exam Score based on Physical Activity {bar chart}
@@ -51,10 +50,11 @@ namespace DataVisualizationApp.ViewModels
                     Values = avgScoreByPhysicalActivity.Select(g => g.AverageScore).ToList(),
                     Name = "Average Exam Score",
                     MaxBarWidth = 50,
-                    Fill = new SolidColorPaint(SKColors.Green),
+                    Fill = new SolidColorPaint(SKColors.Yellow),
 
                     DataLabelsPaint = new SolidColorPaint(SKColors.Black),
                     DataLabelsPosition = LiveChartsCore.Measure.DataLabelsPosition.Top,
+                    Stroke = new SolidColorPaint(SKColors.Black),
                     DataLabelsSize = 16,
                     DataLabelsFormatter = point => point.Model.ToString("0.0")
                 }

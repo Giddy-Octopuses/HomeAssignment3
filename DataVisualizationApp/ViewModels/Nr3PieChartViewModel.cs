@@ -1,9 +1,10 @@
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System;
+using SkiaSharp;
+using LiveChartsCore.SkiaSharpView.Painting;
 
 
 //Students with Exam Score [a pie chart with exam scores 0-10; 11-20; 21-30 and so on]
@@ -39,6 +40,7 @@ namespace DataVisualizationApp.ViewModels
                 {
                     Values = new int[] { kvp.Count },
                     Name = $"{kvp.ScoreRange}",
+                    Stroke = new SolidColorPaint(SKColors.Black),
                     DataLabelsFormatter = point => $"{point.Context.DataSource}" // Display the number of students
                 }).ToList();
         }

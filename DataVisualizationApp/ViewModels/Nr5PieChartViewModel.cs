@@ -1,10 +1,10 @@
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System;
+using SkiaSharp;
+using LiveChartsCore.SkiaSharpView.Painting;
 
 
 //Students based on their sleep hours
@@ -33,6 +33,7 @@ namespace DataVisualizationApp.ViewModels
                 {
                     Values = new int[] { kvp.Value },
                     Name = $"{kvp.Key}",
+                    Stroke = new SolidColorPaint(SKColors.Black),
                 }).ToList();
         }
     }
