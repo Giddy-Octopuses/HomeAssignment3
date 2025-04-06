@@ -13,15 +13,8 @@ using LiveChartsCore.SkiaSharpView.Painting;
 
 namespace DataVisualizationApp.ViewModels
 {
-    public class Nr6PieChartViewModel : ViewModelBase
+    public class Nr6PieChartViewModel : ChartViewModelBase
     {
-        private IEnumerable<ISeries> _series = new List<ISeries>();
-        public IEnumerable<ISeries> Series
-        {
-            get => _series;
-            set { _series = value; OnPropertyChanged(); }
-        }
-
         private List<string> _labels = new List<string>();
         public List<string> Labels
         {
@@ -34,10 +27,10 @@ namespace DataVisualizationApp.ViewModels
         public Nr6PieChartViewModel()
         {
             _data = CsvService.LoadCsv();
-            LoadDataFromCSV();
+            LoadData();
         }
 
-        private void LoadDataFromCSV()
+        protected override void LoadData()
         {
             // Define a mapping for Motivation_Level
             var motivationMapping = new Dictionary<string, int>
@@ -68,7 +61,7 @@ namespace DataVisualizationApp.ViewModels
                     Name = "Male",
                     Fill = new SolidColorPaint(SKColors.LightBlue),
                     Stroke = new SolidColorPaint(SKColors.DarkBlue),
-                    InnerRadius = 0
+                    InnerRadius = 40
                 },
                 // Outer part ( Female)
                 new PieSeries<double>
@@ -82,11 +75,5 @@ namespace DataVisualizationApp.ViewModels
             };
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
