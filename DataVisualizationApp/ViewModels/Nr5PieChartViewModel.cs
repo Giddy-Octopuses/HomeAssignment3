@@ -35,6 +35,5 @@ namespace DataVisualizationApp.ViewModels
                     Name = $"{kvp.Key}",
                 }).ToList();
         }
-
     }
 }

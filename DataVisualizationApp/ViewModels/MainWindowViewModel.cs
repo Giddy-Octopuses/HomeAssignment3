@@ -145,7 +145,7 @@ public partial class MainWindowViewModel : ViewModelBase
         SelectedChartIndex = -1; // Reset the selection
         DeleteButtonVisible = false;
 
-        if (App.Current.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
+        if (App.Current?.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
         {
             if (desktop.MainWindow is MainWindow mainWindow)
             {
