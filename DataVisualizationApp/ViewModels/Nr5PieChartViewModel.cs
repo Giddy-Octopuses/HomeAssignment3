@@ -12,21 +12,9 @@ using System;
 
 namespace DataVisualizationApp.ViewModels
 {
-    public class Nr5PieChartViewModel : ViewModelBase
+    public class Nr5PieChartViewModel : ChartViewModelBase
     {
-        private IEnumerable<ISeries> _series = new List<ISeries>();
-        public IEnumerable<ISeries> Series
-        {
-            get => _series;
-            set { _series = value; OnPropertyChanged(); }
-        }
-
-        public Nr5PieChartViewModel()
-        {
-            LoadDataFromCSV();
-        }
-
-        private void LoadDataFromCSV()
+        protected override void LoadData()
         {
             List<StudentPerformance> students = CsvService.LoadCsv();
 
@@ -44,12 +32,5 @@ namespace DataVisualizationApp.ViewModels
                 }).ToList();
         }
 
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

@@ -11,21 +11,9 @@ using System.Runtime.CompilerServices;
 
 namespace DataVisualizationApp.ViewModels
 {
-    public class Nr3PieChartViewModel : ViewModelBase
+    public class Nr3PieChartViewModel : ChartViewModelBase
     {
-        private IEnumerable<ISeries> _series = new List<ISeries>();
-        public IEnumerable<ISeries> Series
-        {
-            get => _series;
-            set { _series = value; OnPropertyChanged(); }
-        }
-
-        public Nr3PieChartViewModel()
-        {
-            LoadDataFromCSV();
-        }
-
-        private void LoadDataFromCSV()
+        protected override void LoadData()
         {
             List<StudentPerformance> students = CsvService.LoadCsv();
 
@@ -49,13 +37,6 @@ namespace DataVisualizationApp.ViewModels
                     Name = $"{kvp.ScoreRange}",
                     DataLabelsFormatter = point => $"{point.Context.DataSource}" // Display the number of students
                 }).ToList();
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

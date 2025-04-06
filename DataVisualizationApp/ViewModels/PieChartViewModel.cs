@@ -9,21 +9,9 @@ using System.Runtime.CompilerServices;
 
 namespace DataVisualizationApp.ViewModels;
 
-public class PieChartViewModel : ViewModelBase
+public class PieChartViewModel : ChartViewModelBase
 {
-    private IEnumerable<ISeries> _series;
-    public IEnumerable<ISeries> Series
-    {
-        get => _series;
-        set { _series = value; OnPropertyChanged(); }
-    }
-
-    public PieChartViewModel()
-    {
-        LoadDataFromCSV();
-    }
-
-    private void LoadDataFromCSV()
+    protected override void LoadData()
     {
         List<StudentPerformance> students = CsvService.LoadCsv();
 
@@ -33,11 +21,5 @@ public class PieChartViewModel : ViewModelBase
 
         Series = schoolCounts.Select(kvp =>
             new PieSeries<int> { Values = [kvp.Value], Name = kvp.Key }).ToList();
-    }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

@@ -11,21 +11,10 @@ using System.Runtime.CompilerServices;
 
 namespace DataVisualizationApp.ViewModels
 {
-    public class Nr2PieChartViewModel : ViewModelBase // INotifyPropertyChanged
+    public class Nr2PieChartViewModel : ChartViewModelBase
     {
-        private IEnumerable<ISeries> _series = new List<ISeries>(); 
-        public IEnumerable<ISeries> Series
-        {
-            get => _series;
-            set { _series = value; OnPropertyChanged(); }
-        }
 
-        public Nr2PieChartViewModel()
-        {
-            LoadDataFromCSV();
-        }
-
-        private void LoadDataFromCSV()
+        protected override void LoadData()
         {
             List<StudentPerformance> students = CsvService.LoadCsv();
             var peerInfluenceCounts = students
@@ -37,13 +26,6 @@ namespace DataVisualizationApp.ViewModels
                     Values = [kvp.Value],
                     Name = $"{kvp.Key}" 
                 }).ToList();
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
