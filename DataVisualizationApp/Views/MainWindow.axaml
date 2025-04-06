@@ -46,15 +46,20 @@
                 <ColumnDefinition Width="2*" /> 
                 <ColumnDefinition Width="1*" /> 
                 <ColumnDefinition Width="1*" /> 
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
 
             <ComboBox Grid.Column="0" ItemsSource="{Binding Queries}" SelectedItem="{Binding SelectedQuery}"
-             MaxDropDownHeight="100" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10"
-             PlaceholderText="Choose from the queries..." />
+                    MaxDropDownHeight="100" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10"
+                    PlaceholderText="Choose from the queries..." />
 
             <Button Grid.Column="1" Content="Add chart" Command="{Binding AddChart}" Background="MediumSeaGreen" HorizontalAlignment="Stretch" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10" />
             <Button Grid.Column="2" Content="Delete chart" Command="{Binding DeleteChart}" Background="IndianRed" HorizontalAlignment="Stretch" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10"
                     IsVisible="{Binding DeleteButtonVisible}" />
+
+            <Button Grid.Column="3" Content="Undo" Command="{Binding Undo}" Background="DeepSkyBlue" HorizontalAlignment="Stretch" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10" />
+            <Button Grid.Column="4" Content="Redo" Command="{Binding Redo}" Background="DeepSkyBlue" HorizontalAlignment="Stretch" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10" />
         </Grid>
 
         <Grid Grid.Row="3">

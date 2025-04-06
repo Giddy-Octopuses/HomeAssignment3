@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -40,6 +40,11 @@ public partial class MainWindowViewModel : ViewModelBase
         SelectedChartIndex = -1; // No chart is selected initially
     }
 
+    // Stacks for undo and redo actions
+    private readonly Stack<List<ViewModelBase?>> UndoStack = new Stack<List<ViewModelBase?>>();
+    private readonly Stack<List<ViewModelBase?>> RedoStack = new Stack<List<ViewModelBase?>>();
+
+
     public ObservableCollection<string> Queries { get; }
     public ObservableCollection<ViewModelBase?> ChartSlots { get; }
     [ObservableProperty] private string? selectedQuery;
@@ -50,6 +55,47 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private string colour = string.Empty;
     [ObservableProperty] private bool deleteButtonVisible = false; // Initially hidden; appears when you click on a chart
 
+    // Undo/Redo Commands
+    [RelayCommand]
+    public void Undo()
+    {
+        if (UndoStack.Count == 0)
+        {
+            ShowPopup("No actions to undo.", "Red");
+            return;
+        }
+
+        var previousState = UndoStack.Pop();
+        RedoStack.Push(new List<ViewModelBase?>(ChartSlots)); // Store the current state in redo stack
+        ChartSlots.Clear();
+        foreach (var chart in previousState)
+        {
+            ChartSlots.Add(chart);
+        }
+
+        Console.WriteLine("Undo executed.");
+    }
+
+    [RelayCommand]
+    public void Redo()
+    {
+        if (RedoStack.Count == 0)
+        {
+            ShowPopup("No actions to redo.", "Red");
+            return;
+        }
+
+        var nextState = RedoStack.Pop();
+        UndoStack.Push(new List<ViewModelBase?>(ChartSlots)); // Store the current state in undo stack
+        ChartSlots.Clear();
+        foreach (var chart in nextState)
+        {
+            ChartSlots.Add(chart);
+        }
+
+        Console.WriteLine("Redo executed.");
+    }
+
     [RelayCommand]
     public async Task AddChart()
     {
@@ -58,6 +104,10 @@ public partial class MainWindowViewModel : ViewModelBase
             await ShowPopup("Error: Please choose a query before clicking 'Add chart'.", "Red");
             return;
         }
+
+        // Save the current state before making changes (for undo functionality)
+        UndoStack.Push(new List<ViewModelBase?>(ChartSlots));
+        RedoStack.Clear(); // Clear the redo stack because we're making a new change
 
         Console.WriteLine("Add Chart command executed.");
         Console.WriteLine($"Selected query: {SelectedQuery}");
@@ -121,6 +171,10 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
+        // Save the current state before making changes (for undo functionality)
+        UndoStack.Push(new List<ViewModelBase?>(ChartSlots));
+        RedoStack.Clear(); // Clear the redo stack because we're making a new change
+
         var chartToRemove = ChartSlots[SelectedChartIndex];
 
         // Add the query back to the Queries list if it was removed
@@ -163,131 +217,5 @@ public partial class MainWindowViewModel : ViewModelBase
         PopupOpen = false;
     }
 
-    public void PresetQueries()
-    {
-        // Average Exam Score for students involved in Extracurricular Activities
-        var extracurricularScores = _data
-            .GroupBy(d => d.Extracurricular_Activities)
-            .Select(g => new
-            {
-                Involved = g.Key,
-                AverageScore = g.Average(d => d.Exam_Score)
-            })
-            .ToList();
 
-        // Average Exam Score by Family Income
-        var averageScoreByFamilyIncome = _data
-            .GroupBy(d => d.Family_Income)
-            .Select(g => new
-            {
-                FamilyIncome = g.Key,
-                AverageScore = g.Average(d => d.Exam_Score)
-            })
-            .ToList();
-
-        // Exam Scores of Students with Less Than 6 Hours of Sleep
-        var sleepLessThan6Hours = _data
-            .Where(d => d.Sleep_Hours < 6)
-            .GroupBy(d => d.Sleep_Hours)
-            .Select(g => new
-            {
-                SleepHours = g.Key,
-                AverageExamScore = g.Average(d => d.Exam_Score)
-            })
-            .ToList();
-
-        // Exam Scores Distribution for Students with Postgraduate Parental Education Level
-        var postgraduateParentalEducation = _data
-            .Where(d => d.Parental_Education_Level == "Postgraduate")
-            .GroupBy(d => d.Exam_Score / 10)
-            .Select(g => new
-            {
-                ScoreRange = g.Key * 10 + "-" + ((g.Key + 1) * 10 - 1),
-                Count = g.Count()
-            })
-            .ToList();
-
-        // Total Attendance by School Type
-        var totalAttendanceBySchoolType = _data
-            .GroupBy(d => d.School_Type)
-            .Select(g => new
-            {
-                SchoolType = g.Key,
-                TotalAttendance = g.Sum(d => d.Attendance)
-            })
-            .ToList();
-
-        // Distribution of Tutoring Sessions
-        var tutoringSessions = _data
-            .GroupBy(d => d.Tutoring_Sessions <= 4 ? d.Tutoring_Sessions.ToString() : "5-8")
-            .Select(g => new
-            {
-                Sessions = g.Key,
-                Count = g.Count()
-            })
-            .ToList();
-
-        // Min, Max, and Average Study Hours for each Motivation Level
-        var studyHoursByMotivation = _data
-            .GroupBy(d => d.Motivation_Level)
-            .Select(g => new
-            {
-                MotivationLevel = g.Key,
-                MinHours = g.Min(d => d.Hours_Studied),
-                MaxHours = g.Max(d => d.Hours_Studied),
-                AvgHours = g.Average(d => d.Hours_Studied)
-            })
-            .ToList();
-
-        // Average Exam Score based on Physical Activity
-        var averageScoreByPhysicalActivity = _data
-            .GroupBy(d => d.Physical_Activity)
-            .Select(g => new
-            {
-                ActivityLevel = g.Key,
-                AverageScore = g.Average(d => d.Exam_Score)
-            })
-            .ToList();
-
-        // Average Motivation Level based on Gender and Peer Influence
-        var motivationByGenderPeerInfluence = _data
-            .GroupBy(d => new { d.Gender, d.Peer_Influence })
-            .Select(g => new
-            {
-                Gender = g.Key.Gender,
-                PeerInfluence = g.Key.Peer_Influence,
-                AverageMotivation = g.Average(d => double.TryParse(d.Motivation_Level, out var level) ? level : 0)
-            })
-            .ToList();
-
-        // Average Exam Score by Teacher Quality
-        var averageScoreByTeacherQuality = _data
-            .GroupBy(d => d.Teacher_Quality)
-            .Select(g => new
-            {
-                TeacherQuality = g.Key,
-                AverageScore = g.Average(d => d.Exam_Score)
-            })
-            .ToList();
-
-        // Percentage of Students by School Type
-        var studentsBySchoolType = _data
-            .GroupBy(d => d.School_Type)
-            .Select(g => new
-            {
-                SchoolType = g.Key,
-                Percentage = (double)g.Count() / _data.Count() * 100
-            })
-            .ToList();
-
-        // Percentage of Students by Peer Influence
-        var studentsByPeerInfluence = _data
-            .GroupBy(d => d.Peer_Influence)
-            .Select(g => new
-            {
-                PeerInfluence = g.Key,
-                Percentage = (double)g.Count() / _data.Count() * 100
-            })
-            .ToList();
-    }
 }
