@@ -11,7 +11,7 @@ namespace DataVisualizationApp.ViewModels;
 
 public class PieChartViewModel : ViewModelBase
 {
-    private IEnumerable<ISeries> _series;
+    private IEnumerable<ISeries> _series = new List<ISeries>();
     public IEnumerable<ISeries> Series
     {
         get => _series;
@@ -33,11 +33,5 @@ public class PieChartViewModel : ViewModelBase
 
         Series = schoolCounts.Select(kvp =>
             new PieSeries<int> { Values = [kvp.Value], Name = kvp.Key }).ToList();
-    }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

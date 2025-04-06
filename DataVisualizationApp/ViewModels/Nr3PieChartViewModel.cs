@@ -50,12 +50,5 @@ namespace DataVisualizationApp.ViewModels
                     DataLabelsFormatter = point => $"{point.Context.DataSource}" // Display the number of students
                 }).ToList();
         }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

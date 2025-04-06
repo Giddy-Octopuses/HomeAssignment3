@@ -67,7 +67,7 @@ namespace DataVisualizationApp.ViewModels
                     Values = [avgMotivationByGender.FirstOrDefault(g => g.Gender == "Male")?.AverageMotivation ?? 0],
                     Name = "Male",
                     Fill = new SolidColorPaint(SKColors.LightBlue),
-                    Stroke = new SolidColorPaint(SKColors.DarkBlue),
+                    Stroke = new SolidColorPaint(SKColors.Black),
                     InnerRadius = 0
                 },
                 // Outer part ( Female)
@@ -76,17 +76,10 @@ namespace DataVisualizationApp.ViewModels
                     Values = [avgMotivationByGender.FirstOrDefault(g => g.Gender == "Female")?.AverageMotivation ?? 0],
                     Name = "Female",
                     Fill = new SolidColorPaint(SKColors.Pink),
-                    Stroke = new SolidColorPaint(SKColors.White),
+                    Stroke = new SolidColorPaint(SKColors.Black),
                     InnerRadius = 40
                 }
             };
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
