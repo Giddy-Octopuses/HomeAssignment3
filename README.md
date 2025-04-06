@@ -16,6 +16,7 @@ We chose the data about Student Performance and created six different charts.
     - Undo/Redo functionality
 - Gabija:
     - Creating the charts
+    - Organizing the code/fixing warnings
 - Emma:
     - Making the UI sketch
     - Making the UI
