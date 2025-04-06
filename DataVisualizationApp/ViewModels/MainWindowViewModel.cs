@@ -35,9 +35,8 @@ namespace DataVisualizationApp.ViewModels
         }
 
         // Stacks for undo and redo actions
-        private readonly Stack<List<ViewModelBase?>> UndoStack = new Stack<List<ViewModelBase?>>();
-        private readonly Stack<List<ViewModelBase?>> RedoStack = new Stack<List<ViewModelBase?>>();
-
+        private readonly Stack<ChartState> UndoStack = new();
+        private readonly Stack<ChartState> RedoStack = new();
 
         public ObservableCollection<string> Queries { get; }
         public ObservableCollection<ViewModelBase?> ChartSlots { get; }
@@ -49,7 +48,15 @@ namespace DataVisualizationApp.ViewModels
         [ObservableProperty] private string colour = string.Empty;
         [ObservableProperty] private bool deleteButtonVisible = false; // Initially hidden; appears when you click on a chart
 
-        // Undo/Redo Commands
+
+        private ChartState CaptureCurrentState()
+        {
+            return new ChartState(
+                new List<ViewModelBase?>(ChartSlots),
+                new List<string>(Queries)
+            );
+        }
+
         [RelayCommand]
         public void Undo()
         {
@@ -59,16 +66,20 @@ namespace DataVisualizationApp.ViewModels
                 return;
             }
 
-            var previousState = UndoStack.Pop();
-            RedoStack.Push(new List<ViewModelBase?>(ChartSlots)); // Store the current state in redo stack
+            RedoStack.Push(CaptureCurrentState());
+
+            var prevState = UndoStack.Pop();
             ChartSlots.Clear();
-            foreach (var chart in previousState)
-            {
+            foreach (var chart in prevState.ChartSlots)
                 ChartSlots.Add(chart);
-            }
+
+            Queries.Clear();
+            foreach (var query in prevState.Queries)
+                Queries.Add(query);
 
             Console.WriteLine("Undo executed.");
         }
+
 
         [RelayCommand]
         public void Redo()
@@ -79,16 +90,20 @@ namespace DataVisualizationApp.ViewModels
                 return;
             }
 
+            UndoStack.Push(CaptureCurrentState());
+
             var nextState = RedoStack.Pop();
-            UndoStack.Push(new List<ViewModelBase?>(ChartSlots)); // Store the current state in undo stack
             ChartSlots.Clear();
-            foreach (var chart in nextState)
-            {
+            foreach (var chart in nextState.ChartSlots)
                 ChartSlots.Add(chart);
-            }
+
+            Queries.Clear();
+            foreach (var query in nextState.Queries)
+                Queries.Add(query);
 
             Console.WriteLine("Redo executed.");
         }
+
 
         [RelayCommand]
         public async Task AddChart()
@@ -100,7 +115,7 @@ namespace DataVisualizationApp.ViewModels
             }
 
             // Save the current state before making changes (for undo functionality)
-            UndoStack.Push(new List<ViewModelBase?>(ChartSlots));
+            UndoStack.Push(CaptureCurrentState());
             RedoStack.Clear(); // Clear the redo stack because we're making a new change
 
             Console.WriteLine("Add Chart command executed.");
@@ -166,7 +181,7 @@ namespace DataVisualizationApp.ViewModels
             }
 
             // Save the current state before making changes (for undo functionality)
-            UndoStack.Push(new List<ViewModelBase?>(ChartSlots));
+            UndoStack.Push(CaptureCurrentState());
             RedoStack.Clear(); // Clear the redo stack because we're making a new change
 
             var chartToRemove = ChartSlots[SelectedChartIndex];
@@ -213,4 +228,17 @@ namespace DataVisualizationApp.ViewModels
 
 
     }
+
+    public class ChartState
+    {
+        public List<ViewModelBase?> ChartSlots { get; set; }
+        public List<string> Queries { get; set; }
+
+        public ChartState(List<ViewModelBase?> chartSlots, List<string> queries)
+        {
+            ChartSlots = chartSlots;
+            Queries = queries;
+        }
+    }
+
 }
