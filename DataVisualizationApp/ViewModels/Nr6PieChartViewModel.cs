@@ -13,7 +13,7 @@ using LiveChartsCore.SkiaSharpView.Painting;
 
 namespace DataVisualizationApp.ViewModels
 {
-    public class Nr6PieChartViewModel : INotifyPropertyChanged
+    public class Nr6PieChartViewModel : ViewModelBase
     {
         private IEnumerable<ISeries> _series = new List<ISeries>();
         public IEnumerable<ISeries> Series

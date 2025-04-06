@@ -12,7 +12,7 @@ using System;
 
 namespace DataVisualizationApp.ViewModels
 {
-    public class Nr5PieChartViewModel : INotifyPropertyChanged
+    public class Nr5PieChartViewModel : ViewModelBase
     {
         private IEnumerable<ISeries> _series = new List<ISeries>();
         public IEnumerable<ISeries> Series

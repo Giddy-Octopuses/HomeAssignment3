@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace DataVisualizationApp.ViewModels;
 
-public class PieChartViewModel : INotifyPropertyChanged
+public class PieChartViewModel : ViewModelBase
 {
     private IEnumerable<ISeries> _series;
     public IEnumerable<ISeries> Series

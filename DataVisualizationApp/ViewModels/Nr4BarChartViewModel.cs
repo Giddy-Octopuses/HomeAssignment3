@@ -14,7 +14,7 @@ using System.Runtime.CompilerServices;
 
 namespace DataVisualizationApp.ViewModels
 {
-    public class Nr4BarChartViewModel : INotifyPropertyChanged
+    public class Nr4BarChartViewModel : ViewModelBase
     {
         private IEnumerable<ISeries> _series = new List<ISeries>();
         public IEnumerable<ISeries> Series

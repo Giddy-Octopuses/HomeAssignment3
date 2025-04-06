@@ -8,11 +8,16 @@
              x:DataType="vm:Nr3PieChartViewModel"
              xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia">
 
-     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" /> <!-- Text -->
+            <RowDefinition Height="8*" /> <!-- Chart -->
+        </Grid.RowDefinitions>
 
-        <TextBlock Text="Students Average Exam Score" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Margin="15"/>
+        <Viewbox Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5">
+            <TextBlock Text="Students Average Exam Score" FontWeight="Bold" HorizontalAlignment="Center" />
+        </Viewbox>
 
-        <lvc:PieChart Series="{Binding Series}" Width="500" Height="500" />
-
-     </StackPanel>
+        <lvc:PieChart Grid.Row="1" Series="{Binding Series}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+    </Grid>
 </UserControl>
