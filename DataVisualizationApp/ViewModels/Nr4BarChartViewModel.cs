@@ -14,15 +14,8 @@ using System.Runtime.CompilerServices;
 
 namespace DataVisualizationApp.ViewModels
 {
-    public class Nr4BarChartViewModel : ViewModelBase
+    public class Nr4BarChartViewModel : ChartViewModelBase
     {
-        private IEnumerable<ISeries> _series = new List<ISeries>();
-        public IEnumerable<ISeries> Series
-        {
-            get => _series;
-            set { _series = value; OnPropertyChanged(); }
-        }
-
         private List<string> _labels = new List<string>();
         public List<string> Labels
         {
@@ -35,10 +28,10 @@ namespace DataVisualizationApp.ViewModels
         public Nr4BarChartViewModel()
         {
             _data = CsvService.LoadCsv();
-            LoadDataFromCSV();
+            LoadData();
         }
 
-        private void LoadDataFromCSV()
+        protected override void LoadData()
         {
             var avgScoreByPhysicalActivity = _data
                 .GroupBy(d => d.Physical_Activity)
@@ -66,13 +59,6 @@ namespace DataVisualizationApp.ViewModels
                     DataLabelsFormatter = point => point.Model.ToString("0.0")
                 }
             };
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
